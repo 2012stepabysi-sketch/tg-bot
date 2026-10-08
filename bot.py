@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 
 from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher, types, F
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery,
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 
 # --- ЗАГРУЗКА ПЕРЕМЕННЫХ ИЗ .env ---
 load_dotenv()
@@ -20,7 +20,7 @@ STAR_EMOJI_ID = os.getenv("STAR_EMOJI_ID", "5920433463428650761")
 GRAM_EMOJI_ID = os.getenv("GRAM_EMOJI_ID", "5778546023349621090")
 CHECK_EMOJI_ID = os.getenv("CHECK_EMOJI_ID", "5776375003280838798")
 CROSS_EMOJI_ID = os.getenv("CROSS_EMOJI_ID", "5778527486270770928")
-WEBAPP_URL = os.getenv("WEBAPP_URL", "https://твой-сайт.netlify.app/")
+
 if not BOT_TOKEN:
     raise ValueError("❌ BOT_TOKEN не найден в .env файле!")
 
@@ -236,21 +236,9 @@ def get_lang(code: str) -> str:
 
 
 # --- КЛАВИАТУРЫ ---
-def get_offer_keyboard(order_id: str, lang: str, nft_url: str = "", nft_name: str = "") -> InlineKeyboardMarkup:
+def get_offer_keyboard(order_id: str, lang: str) -> InlineKeyboardMarkup:
     t = TEXTS[lang]
-
-    # Формируем URL мини-приложения с параметрами подарка
-            if nft_url:
-        first_row = [
-            InlineKeyboardButton(
-                text="ПОКАЗАТЬ ПОДАРОК",
-                url=nft_url
-            )
-        ]
-    else:
-        first_row = []
-
-    return InlineKeyboardMarkup(inline_keyboard=first_row + [
+    return InlineKeyboardMarkup(inline_keyboard=[
         [
             InlineKeyboardButton(
                 text=t["btn_accept"],
@@ -264,6 +252,7 @@ def get_offer_keyboard(order_id: str, lang: str, nft_url: str = "", nft_name: st
             ),
         ]
     ])
+
 
 def get_deal_keyboard(order_id: str, lang: str) -> InlineKeyboardMarkup:
     t = TEXTS[lang]
@@ -364,7 +353,7 @@ async def cmd_buy_business(message: types.Message):
 
     await message.answer(
         text=text,
-        reply_markup=get_offer_keyboard(order_id, lang, nft_url, nft_name),
+        reply_markup=get_offer_keyboard(order_id, lang),
         disable_web_page_preview=True,
         parse_mode="HTML"
     )
