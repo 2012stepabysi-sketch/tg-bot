@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 
 from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher, types, F
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery, WebAppInfo
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery,
 
 # --- ЗАГРУЗКА ПЕРЕМЕННЫХ ИЗ .env ---
 load_dotenv()
@@ -240,25 +240,11 @@ def get_offer_keyboard(order_id: str, lang: str, nft_url: str = "", nft_name: st
     t = TEXTS[lang]
 
     # Формируем URL мини-приложения с параметрами подарка
-    if nft_url:
-        # "Mighty Arm #1580" → name="Mighty Arm", num="1580"
-        try:
-            name_part, num_part = nft_name.rsplit(" #", 1)
-        except ValueError:
-            name_part, num_part = nft_name, ""
-
-        webapp_url = (
-            f"{WEBAPP_URL}"
-            f"?name={name_part.replace(' ', '%20')}"
-            f"&num={num_part}"
-            f"&link={nft_url}"
-            f"&emoji=💪"
-        )
-
+            if nft_url:
         first_row = [
             InlineKeyboardButton(
                 text="ПОКАЗАТЬ ПОДАРОК",
-                web_app=WebAppInfo(url=webapp_url)
+                url=nft_url
             )
         ]
     else:
